@@ -1,0 +1,10 @@
+It adds 6 shortcuts when editing a Todo file:
+
+'Cmd/Ctrl+Enter' // Triggers `Todo: Toggle Box`
+'Alt+Enter' // Triggers `Todo: Toggle Box`
+'Alt+S' // Triggers `Todo: Toggle Start`
+'Alt+D' // Triggers `Todo: Toggle Done`
+'Alt+C' // Triggers `Todo: Toggle Cancelled`
+'Cmd/Ctrl+Shift+A' // Triggers  `Todo: Archive`
+
+### Nomad Todo

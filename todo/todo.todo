@@ -1,12 +1,3 @@
-It adds 6 shortcuts when editing a Todo file:
+☐ Finish the page of the trip
+☐ Make the different pages of the app
 
-'Cmd/Ctrl+Enter' // Triggers `Todo: Toggle Box`
-'Alt+Enter' // Triggers `Todo: Toggle Box`
-'Alt+S' // Triggers `Todo: Toggle Start`
-'Alt+D' // Triggers `Todo: Toggle Done`
-'Alt+C' // Triggers `Todo: Toggle Cancelled`
-'Cmd/Ctrl+Shift+A' // Triggers  `Todo: Archive`
-
-### Nomad Todo
-Project 1
-☐ Task 1
