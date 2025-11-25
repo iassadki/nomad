@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'trips_list.dart';
 import '../components/text_input.dart';
 import '../components/button_primary.dart';
 
@@ -12,32 +11,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  // int _selectedIndex = 0;
-
-  // void _onNavBarTap(int index) {
-  //   setState(() {
-  //     _selectedIndex = index;
-  //   });
-  //   // Navigation en fonction de l'index
-  //   switch (index) {
-  //     case 0:
-  //       // Home - rester sur la page actuelle
-  //       break;
-  //     case 1:
-  //       Navigator.push(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => const trips_list()),
-  //       );
-  //       break;
-  //     case 2:
-  //       // My Trip
-  //       break;
-  //     case 3:
-  //       // Profile
-  //       break;
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,10 +58,7 @@ class _LoginState extends State<Login> {
                 child: ButtonPrimary(
                   label: 'Login',
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const trips_list()),
-                    );
+                    Navigator.of(context).pushReplacementNamed('/trips');
                   },
                 ),
               ),

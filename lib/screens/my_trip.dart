@@ -3,7 +3,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../components/icon_label_card.dart';
 import '../components/custom_back_button.dart';
 import '../components/bottom_nav_bar.dart';
-import 'trips_list.dart';
+import 'trips.dart';
 
 class my_trip extends StatefulWidget {
   const my_trip({super.key});
@@ -26,7 +26,7 @@ class _my_tripState extends State<my_trip> {
       case 1:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const trips_list()),
+          MaterialPageRoute(builder: (context) => const trips()),
         );
         break;
       case 2:

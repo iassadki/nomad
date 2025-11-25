@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import '../trips_list.dart';
+import '../trips.dart';
 import '../../components/text_input.dart';
 import '../../components/button_primary.dart';
 
@@ -26,7 +26,7 @@ class _LoginState extends State<Login> {
   //     case 1:
   //       Navigator.push(
   //         context,
-  //         MaterialPageRoute(builder: (context) => const trips_list()),
+  //         MaterialPageRoute(builder: (context) => const trips()),
   //       );
   //       break;
   //     case 2:
@@ -87,7 +87,7 @@ class _LoginState extends State<Login> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const trips_list()),
+                      MaterialPageRoute(builder: (context) => const trips()),
                     );
                   },
                 ),

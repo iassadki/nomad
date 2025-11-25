@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import '../screens/trips_list.dart';
-import '../screens/search.dart';
-import '../screens/favorites.dart';
-import '../screens/profile.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -34,28 +30,23 @@ class BottomNavBar extends StatelessWidget {
 
   void _navigateTo(int index) {
     onTap(index);
+    String routeName = '';
     switch (index) {
       case 0:
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const trips_list()),
-        );
+        routeName = '/trips';
         break;
       case 1:
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const search()),
-        );
+        routeName = '/search';
         break;
       case 2:
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const favorites()),
-        );
+        routeName = '/favorites';
         break;
       case 3:
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const profile()),
-        );
+        routeName = '/profile';
         break;
     }
+    
+    Navigator.of(context).pushReplacementNamed(routeName);
   }
 
   @override

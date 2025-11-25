@@ -1,43 +1,21 @@
 import 'package:flutter/material.dart';
 import '../components/custom_back_button.dart';
 import '../components/bottom_nav_bar.dart';
-import 'my_trip.dart';
-import 'account_and_login/login.dart';
 
-class trips_list extends StatefulWidget {
-  const trips_list({super.key});
+class trips extends StatefulWidget {
+  const trips({super.key});
 
   @override
-  State<trips_list> createState() => _trips_listState();
+  State<trips> createState() => _tripsState();
 }
 
-class _trips_listState extends State<trips_list> {
-  int _selectedIndex = 1;
+class _tripsState extends State<trips> {
+  int _selectedIndex = 0;
 
   void _onNavBarTap(int index) {
     setState(() {
       _selectedIndex = index;
     });
-    switch (index) {
-      case 0:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const Login()),
-        );
-        break;
-      case 1:
-        // Rester sur cette page
-        break;
-      case 2:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const my_trip()),
-        );
-        break;
-      case 3:
-        // Profile
-        break;
-    }
   }
 
   @override
@@ -61,10 +39,7 @@ class _trips_listState extends State<trips_list> {
 
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const my_trip()),
-                );
+                Navigator.of(context).pushReplacementNamed('/my_trip');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFFF8D2E),

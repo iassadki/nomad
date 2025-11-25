@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../components/custom_back_button.dart';
 import '../components/bottom_nav_bar.dart';
-import 'trips_list.dart';
 
 class search extends StatefulWidget {
   const search({super.key});
@@ -17,23 +16,6 @@ class _searchState extends State<search> {
     setState(() {
       _selectedIndex = index;
     });
-    switch (index) {
-      case 0:
-        // Home
-        break;
-      case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const trips_list()),
-        );
-        break;
-      case 2:
-        // Rester sur cette page
-        break;
-      case 3:
-        // Profile
-        break;
-    }
   }
 
   @override
