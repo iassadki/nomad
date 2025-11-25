@@ -13,21 +13,6 @@ class BottomNavBar extends StatelessWidget {
     required this.context,
   }) : super(key: key);
 
-  String _getPageName(int index) {
-    switch (index) {
-      case 0:
-        return 'Trips';
-      case 1:
-        return 'Search';
-      case 2:
-        return 'Favorites';
-      case 3:
-        return 'Profile';
-      default:
-        return '';
-    }
-  }
-
   void _navigateTo(int index) {
     onTap(index);
     String routeName = '';
@@ -51,31 +36,17 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Text(
-            _getPageName(currentIndex),
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.black87,
-            ),
-          ),
-        ),
-        BottomNavigationBar(
-          currentIndex: currentIndex,
-          onTap: _navigateTo,
-          backgroundColor: Colors.white,
-          selectedItemColor: const Color(0xFFFF8D2E),
-          unselectedItemColor: Colors.grey,
-          type: BottomNavigationBarType.fixed,
-          iconSize: 28,
-          selectedFontSize: 14,
-          unselectedFontSize: 12,
-          items: const [
+    return BottomNavigationBar(
+      currentIndex: currentIndex,
+      onTap: _navigateTo,
+      backgroundColor: Colors.white,
+      selectedItemColor: const Color(0xFFFF8D2E),
+      unselectedItemColor: Colors.grey,
+      type: BottomNavigationBarType.fixed,
+      iconSize: 28,
+      selectedFontSize: 14,
+      unselectedFontSize: 12,
+      items: const [
             BottomNavigationBarItem(
               icon: Icon(LucideIcons.plane),
               label: 'Trips',
@@ -93,8 +64,6 @@ class BottomNavBar extends StatelessWidget {
               label: 'Profile',
             ),
           ],
-        ),
-      ],
-    );
+        );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../components/custom_back_button.dart';
 import '../components/bottom_nav_bar.dart';
 
 class profile extends StatefulWidget {
