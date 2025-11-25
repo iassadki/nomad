@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
-import '../components/icon_label_card.dart';
 import '../components/custom_back_button.dart';
 import '../components/bottom_nav_bar.dart';
 import 'trips_list.dart';
@@ -13,7 +11,7 @@ class profile extends StatefulWidget {
 }
 
 class _profileState extends State<profile> {
-  int _selectedIndex = 2;
+  int _selectedIndex = 3;
 
   void _onNavBarTap(int index) {
     setState(() {
@@ -62,6 +60,7 @@ class _profileState extends State<profile> {
       bottomNavigationBar: BottomNavBar(
         currentIndex: _selectedIndex,
         onTap: _onNavBarTap,
+        context: context,
       ),
     );
   }

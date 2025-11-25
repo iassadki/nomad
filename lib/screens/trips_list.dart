@@ -105,6 +105,7 @@ class _trips_listState extends State<trips_list> {
       bottomNavigationBar: BottomNavBar(
         currentIndex: _selectedIndex,
         onTap: _onNavBarTap,
+        context: context,
       ),
     );
   }

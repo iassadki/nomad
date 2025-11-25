@@ -70,6 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavBar(
         currentIndex: _selectedIndex,
         onTap: _onNavBarTap,
+        context: context,
       ),
     );
   }

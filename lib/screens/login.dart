@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import '../trips_list.dart';
-import '../../components/text_input.dart';
-import '../../components/button_primary.dart';
+import 'trips_list.dart';
+import '../components/text_input.dart';
+import '../components/button_primary.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -96,10 +96,6 @@ class _LoginState extends State<Login> {
           ),
         ),
       ),
-      // bottomNavigationBar: BottomNavBar(
-      //   currentIndex: _selectedIndex,
-      //   onTap: _onNavBarTap,
-      // ),
     );
   }
 }

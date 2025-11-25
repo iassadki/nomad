@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import '../screens/trips_list.dart';
+import '../screens/search.dart';
+import '../screens/favorites.dart';
+import '../screens/profile.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
+  final BuildContext context;
 
   const BottomNavBar({
     Key? key,
     required this.currentIndex,
     required this.onTap,
+    required this.context,
   }) : super(key: key);
 
   String _getPageName(int index) {
@@ -23,6 +29,32 @@ class BottomNavBar extends StatelessWidget {
         return 'Profile';
       default:
         return '';
+    }
+  }
+
+  void _navigateTo(int index) {
+    onTap(index);
+    switch (index) {
+      case 0:
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const trips_list()),
+        );
+        break;
+      case 1:
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const search()),
+        );
+        break;
+      case 2:
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const favorites()),
+        );
+        break;
+      case 3:
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const profile()),
+        );
+        break;
     }
   }
 
@@ -44,7 +76,7 @@ class BottomNavBar extends StatelessWidget {
         ),
         BottomNavigationBar(
           currentIndex: currentIndex,
-          onTap: onTap,
+          onTap: _navigateTo,
           backgroundColor: Colors.white,
           selectedItemColor: const Color(0xFFFF8D2E),
           unselectedItemColor: Colors.grey,

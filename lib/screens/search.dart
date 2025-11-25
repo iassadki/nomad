@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
-import '../components/icon_label_card.dart';
 import '../components/custom_back_button.dart';
 import '../components/bottom_nav_bar.dart';
 import 'trips_list.dart';
@@ -13,7 +11,7 @@ class search extends StatefulWidget {
 }
 
 class _searchState extends State<search> {
-  int _selectedIndex = 2;
+  int _selectedIndex = 1;
 
   void _onNavBarTap(int index) {
     setState(() {
@@ -51,7 +49,7 @@ class _searchState extends State<search> {
             const SizedBox(height: 30),
 
             const Text(
-              'Profile',
+              'Search',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
 
@@ -62,6 +60,7 @@ class _searchState extends State<search> {
       bottomNavigationBar: BottomNavBar(
         currentIndex: _selectedIndex,
         onTap: _onNavBarTap,
+        context: context,
       ),
     );
   }
