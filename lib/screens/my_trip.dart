@@ -13,7 +13,7 @@ class my_trip extends StatefulWidget {
 }
 
 class _my_tripState extends State<my_trip> {
-  int _selectedIndex = 2;
+  int _selectedIndex = 0;
 
   void _onNavBarTap(int index) {
     setState(() {
@@ -21,19 +21,12 @@ class _my_tripState extends State<my_trip> {
     });
     switch (index) {
       case 0:
-        // Home
         break;
       case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const trips()),
-        );
         break;
       case 2:
-        // Rester sur cette page
         break;
       case 3:
-        // Profile
         break;
     }
   }
