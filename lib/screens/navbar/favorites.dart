@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import '../components/bottom_nav_bar.dart';
+import '../../components/bottom_nav_bar.dart';
 
-class search extends StatefulWidget {
-  const search({super.key});
+class favorites extends StatefulWidget {
+  const favorites({super.key});
 
   @override
-  State<search> createState() => _searchState();
+  State<favorites> createState() => _favoritesState();
 }
 
-class _searchState extends State<search> {
-  int _selectedIndex = 1;
+class _favoritesState extends State<favorites> {
+  int _selectedIndex = 2;
 
   void _onNavBarTap(int index) {
     setState(() {
@@ -30,7 +30,7 @@ class _searchState extends State<search> {
             const SizedBox(height: 30),
 
             const Text(
-              'Search',
+              'Favorites',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
 

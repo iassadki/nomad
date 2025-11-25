@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import '../trips.dart';
+import '../navbar/trips.dart';
 import '../../components/text_input.dart';
 import '../../components/button_primary.dart';
 

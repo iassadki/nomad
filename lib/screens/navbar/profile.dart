@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import '../components/bottom_nav_bar.dart';
+import '../../components/bottom_nav_bar.dart';
 
-class favorites extends StatefulWidget {
-  const favorites({super.key});
+class profile extends StatefulWidget {
+  const profile({super.key});
 
   @override
-  State<favorites> createState() => _favoritesState();
+  State<profile> createState() => _profileState();
 }
 
-class _favoritesState extends State<favorites> {
-  int _selectedIndex = 2;
+class _profileState extends State<profile> {
+  int _selectedIndex = 3;
 
   void _onNavBarTap(int index) {
     setState(() {
@@ -30,7 +30,7 @@ class _favoritesState extends State<favorites> {
             const SizedBox(height: 30),
 
             const Text(
-              'Favorites',
+              'Profile',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
 

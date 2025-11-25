@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'screens/account_and_login/login.dart';
-import 'screens/trips.dart';
-import 'screens/my_trip.dart';
-import 'screens/search.dart';
-import 'screens/favorites.dart';
-import 'screens/profile.dart';
+import 'screens/navbar/trips.dart';
+import 'screens/trip_related/my_trip.dart';
+import 'screens/navbar/search.dart';
+import 'screens/navbar/favorites.dart';
+import 'screens/navbar/profile.dart';
 
 void main() => runApp(const MyApp());
 

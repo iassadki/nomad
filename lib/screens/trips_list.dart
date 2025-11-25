@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
-import '../components/icon_label_card.dart';
 import '../components/custom_back_button.dart';
 import '../components/bottom_nav_bar.dart';
-import 'trips.dart';
+import 'trip_related/my_trip.dart';
 
-class my_trip extends StatefulWidget {
-  const my_trip({super.key});
+class trips_list extends StatefulWidget {
+  const trips_list({super.key});
 
   @override
-  State<my_trip> createState() => _my_tripState();
+  State<trips_list> createState() => _trips_listState();
 }
 
-class _my_tripState extends State<my_trip> {
-  int _selectedIndex = 0;
+class _trips_listState extends State<trips_list> {
+  int _selectedIndex = 1;
 
   void _onNavBarTap(int index) {
     setState(() {
@@ -21,12 +19,19 @@ class _my_tripState extends State<my_trip> {
     });
     switch (index) {
       case 0:
+        // Rester sur cette page (Trips)
         break;
       case 1:
+        // Rester sur cette page
         break;
       case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const my_trip()),
+        );
         break;
       case 3:
+        // Profile
         break;
     }
   }
@@ -44,51 +49,33 @@ class _my_tripState extends State<my_trip> {
             const SizedBox(height: 30),
 
             const Text(
-              'My Trip In Porto/Lisboa',
+              'My Trips',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 15),
 
-            IconLabelCard(
-              icon: Icon(
-                LucideIcons.calendar,
-                color: Color(0xFFFF8D2E),
-                size: 24,
-              ),
-              label: 'City, from date to date',
-              onTap: () {
-                print('Destination cliquée');
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const my_trip()),
+                );
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFFF8D2E),
+                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              child: const Text(
+                'Porto, from date to date',
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              ),
             ),
 
             const SizedBox(height: 15),
-
-            IconLabelCard(
-              icon: Icon(
-                LucideIcons.mapPin,
-                color: Color(0xFFFF8D2E),
-                size: 24,
-              ),
-              label: 'Map of the city',
-              onTap: () {
-                print('Destination cliquée');
-              },
-            ),
-
-            const SizedBox(height: 15),
-
-            IconLabelCard(
-              icon: Icon(
-                LucideIcons.stickyNote,
-                color: Color(0xFFFF8D2E),
-                size: 24,
-              ),
-              label: 'Note of the trip',
-              onTap: () {
-                print('Destination cliquée');
-              },
-            ),
 
             const Spacer(),
 
@@ -98,7 +85,7 @@ class _my_tripState extends State<my_trip> {
                   Navigator.of(context).pop();
                 },
                 style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
