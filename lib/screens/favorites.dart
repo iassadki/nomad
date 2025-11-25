@@ -26,8 +26,8 @@ class _favoritesState extends State<favorites> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 20),
-            CustomBackButton(margin: const EdgeInsets.only(top: 10, right: 15)),
+            const SizedBox(height: 80),
+            // CustomBackButton(margin: const EdgeInsets.only(top: 10, right: 15)),
             const SizedBox(height: 30),
 
             const Text(
