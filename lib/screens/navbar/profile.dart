@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../components/bottom_nav_bar.dart';
+import '../../constants/text_styles.dart';
 
 class profile extends StatefulWidget {
   const profile({super.key});
@@ -31,7 +32,7 @@ class _profileState extends State<profile> {
 
             const Text(
               'Profile',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyles.h1,
             ),
 
             const SizedBox(height: 20),

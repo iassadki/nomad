@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../components/custom_back_button.dart';
 import '../../components/bottom_nav_bar.dart';
+import '../../constants/text_styles.dart';
 
 class trips extends StatefulWidget {
   const trips({super.key});
@@ -32,7 +33,7 @@ class _tripsState extends State<trips> {
 
             const Text(
               'My Trips',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyles.h1,
             ),
 
             const SizedBox(height: 15),
