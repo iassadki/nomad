@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../components/bottom_nav_bar.dart';
+import '../../components/input_text_field.dart';
 
 class search extends StatefulWidget {
   const search({super.key});
@@ -34,6 +36,14 @@ class _searchState extends State<search> {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
 
+            InputTextField(
+              hintText: 'Rechercher...',
+              icon: LucideIcons.search,
+              iconColor: Colors.blue,
+              onChanged: (value) {
+                print('Recherche: $value');
+              },
+            ),
             const SizedBox(height: 20),
           ],
         ),
