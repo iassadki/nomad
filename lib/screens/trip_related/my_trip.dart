@@ -3,6 +3,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../components/icon_label_card.dart';
 import '../../components/custom_back_button.dart';
 import '../../components/bottom_nav_bar.dart';
+import '../../components/button_primary.dart';
 
 class my_trip extends StatefulWidget {
   const my_trip({super.key});

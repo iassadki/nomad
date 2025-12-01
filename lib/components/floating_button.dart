@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class FloatingButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String? navigationRoute;
   final Color? backgroundColor;
-  final Color? iconColor;
   final double size;
+  final Widget? child;
 
   const FloatingButton({
     super.key,
     this.onPressed,
     this.navigationRoute,
     this.backgroundColor,
-    this.iconColor,
     this.size = 56.0,
+    this.child,
   });
 
   @override
@@ -42,9 +43,9 @@ class FloatingButton extends StatelessWidget {
             ),
           ],
         ),
-        child: Icon(
+        child: child ?? Icon(
           Icons.add,
-          color: iconColor ?? Colors.white,
+          color: Colors.white,
           size: size * 0.5,
         ),
       ),
