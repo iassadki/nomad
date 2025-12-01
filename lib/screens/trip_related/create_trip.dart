@@ -40,7 +40,7 @@ class _create_tripState extends State<create_trip> {
               alignment: Alignment.centerLeft,
               child: FloatingButton(
                 navigationRoute: '/create_trip',
-                child: Icon(LucideIcons.plus, color: Colors.white),
+                child: Icon(LucideIcons.chevronLeft, color: Colors.white),
               )
             ),
             const SizedBox(height: 20),
