@@ -5,6 +5,7 @@ import 'screens/trip_related/my_trip.dart';
 import 'screens/navbar/search.dart';
 import 'screens/navbar/favorites.dart';
 import 'screens/navbar/profile.dart';
+import 'screens/trip_related/create_trip.dart';
 
 void main() => runApp(const MyApp());
 
@@ -39,6 +40,9 @@ class _MyAppState extends State<MyApp> {
         break;
       case '/my_trip':
         page = const my_trip();
+        break;
+      case '/create_trip':
+        page = const create_trip();
         break;
       default:
         page = const Login();

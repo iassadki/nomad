@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
-class FloatingAddButton extends StatelessWidget {
-  final VoidCallback onPressed;
+class FloatingButton extends StatelessWidget {
+  final VoidCallback? onPressed;
+  final String? navigationRoute;
   final Color? backgroundColor;
   final Color? iconColor;
   final double size;
 
-  const FloatingAddButton({
+  const FloatingButton({
     super.key,
-    required this.onPressed,
+    this.onPressed,
+    this.navigationRoute,
     this.backgroundColor,
     this.iconColor,
     this.size = 56.0,
@@ -17,7 +19,13 @@ class FloatingAddButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onPressed,
+      onTap: () {
+        if (navigationRoute != null) {
+          Navigator.of(context).pushReplacementNamed(navigationRoute!);
+        } else if (onPressed != null) {
+          onPressed!();
+        }
+      },
       child: Container(
         width: size,
         height: size,

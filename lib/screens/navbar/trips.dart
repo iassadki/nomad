@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../components/bottom_nav_bar.dart';
+import '../../components/floating_button.dart';
 
 class trips extends StatefulWidget {
   const trips({super.key});
@@ -152,12 +153,8 @@ class _tripsState extends State<trips> {
               // Bouton plus flottant
               Align(
                 alignment: Alignment.centerRight,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    print('Créer un nouveau voyage');
-                  },
-                  backgroundColor: const Color(0xFFFF6B35),
-                  child: const Icon(Icons.add, color: Colors.white),
+                child: FloatingButton(
+                  navigationRoute: '/create_trip',
                 ),
               ),
             ],
