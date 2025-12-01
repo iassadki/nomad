@@ -68,7 +68,6 @@ class _tripsState extends State<trips> {
               ),
               const SizedBox(height: 24),
 
-              // Carte de voyage
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
