@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import '../navbar/trips.dart';
 import '../../components/text_input.dart';
 import '../../components/button_primary.dart';
 
@@ -85,10 +84,7 @@ class _LoginState extends State<Login> {
                 child: ButtonPrimary(
                   label: 'Login',
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const trips()),
-                    );
+                    Navigator.of(context).pushReplacementNamed('/trips');
                   },
                 ),
               ),

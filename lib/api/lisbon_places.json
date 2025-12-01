@@ -1,30 +1,30 @@
 {
     "cities": {
-        "porto": {
+        "lisbon": {
             "places": [
                 {
                     "id": 1,
-                    "placeName": "Ribeira"
+                    "placeName": "Belém"
                 },
                 {
                     "id": 2,
-                    "placeName": "Pont Dom-Luís"
+                    "placeName": "Torre de Belém"
                 },
                 {
                     "id": 3,
-                    "placeName": "Livraria Lello"
+                    "placeName": "Alfama"
                 },
                 {
                     "id": 4,
-                    "placeName": "Torre dos Clérigos"
+                    "placeName": "Castelo de São Jorge"
                 },
                 {
                     "id": 5,
-                    "placeName": "Caves de Gaia"
+                    "placeName": "Praça do Comércio"
                 },
                 {
                     "id": 6,
-                    "placeName": "Estádio do Dragão"
+                    "placeName": "Estádio da Luz"
                 }
             ]
         }
