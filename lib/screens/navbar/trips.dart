@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../components/bottom_nav_bar.dart';
 import '../../components/floating_button.dart';
+import '../../constants/text_styles.dart';
 
 class trips extends StatefulWidget {
   const trips({super.key});
@@ -24,52 +25,20 @@ class _tripsState extends State<trips> {
       backgroundColor: const Color(0xFFF5F5F0),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Logo et titre
-              Row(
-                children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFF6B35),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Icon(
-                      Icons.backpack,
-                      color: Colors.white,
-                      size: 24,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  const Text(
-                    'NOMAD',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFFF6B35),
-                      letterSpacing: 1,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 32),
+
+              const SizedBox(height: 100),
 
               // Titre My Trips
-              const Text(
-                'My Trips',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 24),
+              const Text('My Trips', style: TextStyles.h1),
 
-              Expanded(
+              const SizedBox(height: 10),
+
+              SizedBox(
+                height: 500,
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),

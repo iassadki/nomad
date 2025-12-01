@@ -25,12 +25,13 @@ class _create_tripState extends State<create_trip> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F0),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 80),
+            const SizedBox(height: 100),
             // CustomBackButton(margin: const EdgeInsets.only(top: 10, right: 15)),
             // const SizedBox(height: 30),
 
