@@ -76,7 +76,7 @@ class _my_tripState extends State<my_trip> {
             // ),
 
             TripMapSection(
-              title: 'Porto, Portugal',
+              title: 'Itinerary',
               onLocationPressed: () {
                 print('Map tapped');
               },
