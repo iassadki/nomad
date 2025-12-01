@@ -3,7 +3,10 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../components/icon_label_card.dart';
 import '../../components/custom_back_button.dart';
 import '../../components/bottom_nav_bar.dart';
-import '../../components/button_primary.dart';
+// import '../../components/button_primary.dart';
+import '../../components/trip_card.dart';
+import '../../components/trip_map_section.dart';
+import '../../components/trip_simple_section.dart';
 
 class my_trip extends StatefulWidget {
   const my_trip({super.key});
@@ -44,49 +47,47 @@ class _my_tripState extends State<my_trip> {
             const SizedBox(height: 30),
 
             const Text(
-              'My Trip In Porto/Lisboa',
+              'My Trip In [City]',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 30),
 
-            IconLabelCard(
-              icon: Icon(
-                LucideIcons.calendar,
-                color: Color(0xFFFF8D2E),
-                size: 24,
-              ),
-              label: 'City, from date to date',
+            TripCard(
+              title: 'Porto',
+              dateRange: 'From [start date] to [end date]',
               onTap: () {
-                print('Destination cliquée');
+                // Action au clic
               },
             ),
 
             const SizedBox(height: 15),
 
-            IconLabelCard(
-              icon: Icon(
-                LucideIcons.mapPin,
-                color: Color(0xFFFF8D2E),
-                size: 24,
-              ),
-              label: 'Map of the city',
-              onTap: () {
-                print('Destination cliquée');
+            // IconLabelCard(
+            //   icon: Icon(
+            //     LucideIcons.mapPin,
+            //     color: Color(0xFFFF8D2E),
+            //     size: 24,
+            //   ),
+            //   label: 'Map of the city',
+            //   onTap: () {
+            //     print('Destination cliquée');
+            //   },
+            // ),
+
+            TripMapSection(
+              title: 'Porto, Portugal',
+              onLocationPressed: () {
+                print('Map tapped');
               },
             ),
 
             const SizedBox(height: 15),
 
-            IconLabelCard(
-              icon: Icon(
-                LucideIcons.stickyNote,
-                color: Color(0xFFFF8D2E),
-                size: 24,
-              ),
-              label: 'Note of the trip',
-              onTap: () {
-                print('Destination cliquée');
+            TripSimpleSection(
+              title: 'Note of the trip',
+              onAddPressed: () {
+                print('Add note clicked');
               },
             ),
 
