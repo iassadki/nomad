@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 // Composant 1 : Section avec carte (Itinerary)
 class TripMapSection extends StatelessWidget {
@@ -59,21 +61,21 @@ class TripMapSection extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 // Icône add
-                GestureDetector(
-                  onTap: onAddPressed,
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.add,
-                      size: 20,
-                      color: Color(0xFFFF6B35),
-                    ),
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: onAddPressed,
+                //   child: Container(
+                //     padding: const EdgeInsets.all(8),
+                //     decoration: BoxDecoration(
+                //       color: Colors.white,
+                //       shape: BoxShape.circle,
+                //     ),
+                //     child: const Icon(
+                //       Icons.add,
+                //       size: 20,
+                //       color: Color(0xFFFF6B35),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -83,28 +85,38 @@ class TripMapSection extends StatelessWidget {
             height: 150,
             margin: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
             decoration: BoxDecoration(
-              color: Colors.grey[200],
               borderRadius: BorderRadius.circular(12),
             ),
-            child:
-                mapWidget ??
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: mapWidget ??
+                  FlutterMap(
+                    options: MapOptions(
+                      initialCenter: const LatLng(41.1579, -8.6291), // Porto, Portugal
+                      initialZoom: 13.0,
+                    ),
                     children: [
-                      Icon(
-                        Icons.map_outlined,
-                        size: 40,
-                        color: Colors.grey[400],
+                      TileLayer(
+                        urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        userAgentPackageName: 'com.nomad.app',
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Map placeholder',
-                        style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                      MarkerLayer(
+                        markers: [
+                          Marker(
+                            point: const LatLng(41.1579, -8.6291),
+                            width: 40,
+                            height: 40,
+                            child: const Icon(
+                              Icons.location_on,
+                              color: Color(0xFFFF6B35),
+                              size: 30,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ),
+            ),
           ),
         ],
       ),

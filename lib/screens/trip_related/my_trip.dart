@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nomad/screens/trip_related/map.dart';
+import 'package:nomad/screens/trip_related/notes.dart'; 
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../components/icon_label_card.dart';
 import '../../components/custom_back_button.dart';
@@ -7,6 +9,9 @@ import '../../components/bottom_nav_bar.dart';
 import '../../components/trip_card.dart';
 import '../../components/trip_map_section.dart';
 import '../../components/trip_simple_section.dart';
+import '../../components/section_card.dart';
+import '../../components/itinerary_section_card.dart';
+
 
 class my_trip extends StatefulWidget {
   const my_trip({super.key});
@@ -75,19 +80,35 @@ class _my_tripState extends State<my_trip> {
             //   },
             // ),
 
-            TripMapSection(
-              title: 'Itinerary',
-              onLocationPressed: () {
-                print('Map tapped');
-              },
-            ),
+            ItinerarySectionCard(
+                          icon: LucideIcons.map,
+                          label: "Itinerary",
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => MapPage()),
+                            );
+                          },
+                        ),
+
 
             const SizedBox(height: 15),
 
-            TripSimpleSection(
-              title: 'Note of the trip',
-              onAddPressed: () {
-                print('Add note clicked');
+            // TripSimpleSection(
+            //   title: 'Note of the trip',
+            //   onAddPressed: () {
+            //     print('Add note clicked');
+            //   },
+            // ),
+
+          SectionCard(
+              icon: LucideIcons.stickyNote,
+              label: "Note of the trip",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NotesPage()),
+                );
               },
             ),
 
