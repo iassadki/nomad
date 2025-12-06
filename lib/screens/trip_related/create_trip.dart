@@ -109,7 +109,7 @@ class _create_tripState extends State<create_trip> {
 
             const Text('Date of your trip', style: TextStyles.h4),
 
-GestureDetector(
+            GestureDetector(
               onTap: () async {
                 final DateTime? pickedDate = await showDatePicker(
                   context: context,
