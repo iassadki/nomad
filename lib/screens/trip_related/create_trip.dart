@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:http/http.dart' as http;
 import '../../../components/bottom_nav_bar.dart';
 import '../../../components/input_text_field.dart';
 import '../../../constants/text_styles.dart';
@@ -16,10 +17,23 @@ class create_trip extends StatefulWidget {
 class _create_tripState extends State<create_trip> {
   int _selectedIndex = 0;
 
+  // ⬇️ AJOUTE CETTE LIGNE POUR LE DROPDOWN ⬇️
+  String? _selectedDestination;
+
+  final TextEditingController _startAddressController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+
   void _onNavBarTap(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void dispose() {
+    _startAddressController.dispose();
+    _dateController.dispose();
+    super.dispose();
   }
 
   @override
@@ -32,16 +46,13 @@ class _create_tripState extends State<create_trip> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 100),
-            // CustomBackButton(margin: const EdgeInsets.only(top: 10, right: 15)),
-            // const SizedBox(height: 30),
 
-            // Bouton plus flottant
             Align(
               alignment: Alignment.centerLeft,
               child: FloatingButton(
                 navigationRoute: '/create_trip',
                 child: Icon(LucideIcons.chevronLeft, color: Colors.white),
-              )
+              ),
             ),
             const SizedBox(height: 20),
 
@@ -49,23 +60,44 @@ class _create_tripState extends State<create_trip> {
 
             const SizedBox(height: 20),
 
-            const Text('Create a Trip', style: TextStyles.h4),
+            const Text('Destination', style: TextStyles.h4),
 
-            InputTextField(
-              hintText: 'Destination',
-              icon: LucideIcons.search,
-              iconColor: Colors.blue,
-              onChanged: (value) {
-                print('Recherche: $value');
-              },
+            const SizedBox(height: 10),
+
+            // ⬇️ DROPDOWN MENU POUR LA DESTINATION ⬇️
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: DropdownButton<String>(
+                value: _selectedDestination,
+                hint: Text('Select destination'),
+                isExpanded: true,
+                underline: SizedBox(),
+                icon: Icon(LucideIcons.chevronDown, color: Colors.blue),
+                items: ['Porto', 'Lisboa'].map((String city) {
+                  return DropdownMenuItem<String>(
+                    value: city,
+                    child: Text(city),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedDestination = newValue;
+                  });
+                },
+              ),
             ),
 
             const SizedBox(height: 20),
 
-            const Text('Starting adress (optional)', style: TextStyles.h4),
+            const Text('Starting address (optional)', style: TextStyles.h4),
 
             InputTextField(
-              hintText: 'Destination',
+              controller: _startAddressController,
+              hintText: 'Starting address',
               icon: LucideIcons.search,
               iconColor: Colors.blue,
               onChanged: (value) {
@@ -77,25 +109,64 @@ class _create_tripState extends State<create_trip> {
 
             const Text('Date of your trip', style: TextStyles.h4),
 
-            InputTextField(
-              hintText: 'Destination',
-              icon: LucideIcons.search,
-              iconColor: Colors.blue,
-              onChanged: (value) {
-                print('Recherche: $value');
+GestureDetector(
+              onTap: () async {
+                final DateTime? pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime.now(),
+                  lastDate: DateTime(2100),
+                  builder: (context, child) {
+                    return Theme(
+                      data: Theme.of(context).copyWith(
+                        colorScheme: ColorScheme.light(
+                          primary: Colors.blue,
+                          onPrimary: Colors.white,
+                          onSurface: Colors.black,
+                        ),
+                      ),
+                      child: child!,
+                    );
+                  },
+                );
+
+                if (pickedDate != null) {
+                  setState(() {
+                    _dateController.text =
+                        "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+                  });
+                }
               },
+              child: AbsorbPointer(
+                child: InputTextField(
+                  controller: _dateController,
+                  hintText: 'Date of your trip',
+                  icon: LucideIcons.calendar,
+                  iconColor: Colors.blue,
+                  onChanged: (value) {},
+                ),
+              ),
             ),
 
             const SizedBox(height: 20),
 
-            // Button primary
             SizedBox(
               width: double.infinity,
               height: 50,
               child: ButtonPrimary(
                 label: 'Create Trip',
                 onPressed: () {
-                  Navigator.of(context).pushReplacementNamed('/trips');
+                  // Récupère les données
+                  final tripData = {
+                    'destination':
+                        _selectedDestination ??
+                        '', // ⬅️ Utilise la destination sélectionnée
+                    'startAddress': _startAddressController.text,
+                    'date': _dateController.text,
+                  };
+
+                  // Envoie vers la page suivante
+                  Navigator.pushNamed(context, '/trips', arguments: tripData);
                 },
               ),
             ),
