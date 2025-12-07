@@ -14,10 +14,12 @@ class ItinerarySectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(24),
-      onTap: onTap, // <---
-      child: Container(
+    return MouseRegion(
+      cursor: onTap != null ? SystemMouseCursors.click : MouseCursor.defer,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(24),
+        onTap: onTap, // <---
+        child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: const Color(0xFFFDF1E3),
@@ -51,6 +53,7 @@ class ItinerarySectionCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

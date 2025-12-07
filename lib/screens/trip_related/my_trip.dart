@@ -116,6 +116,9 @@ class _my_tripState extends State<my_trip> {
                   ItinerarySectionCard(
                     icon: LucideIcons.map,
                     label: "Itinerary",
+                    onTap: () {
+                      Navigator.pushNamed(context, '/map');
+                    },
                   ),
 
                   const SizedBox(height: 15),
