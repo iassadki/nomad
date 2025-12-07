@@ -16,7 +16,9 @@ import '../../components/itinerary_section_card.dart';
 
 
 class my_trip extends StatefulWidget {
-  const my_trip({super.key});
+  final dynamic trip; // Le trip sélectionné
+
+  const my_trip({super.key, this.trip});
 
   @override
   State<my_trip> createState() => _my_tripState();
@@ -24,29 +26,14 @@ class my_trip extends StatefulWidget {
 
 class _my_tripState extends State<my_trip> {
   int _selectedIndex = 0;
-  List<dynamic> trips = [];
-  bool isLoading = true;
+  dynamic selectedTrip;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _loadTrips();
-  }
-
-  Future<void> _loadTrips() async {
-    try {
-      final String response = await rootBundle.loadString('assets/api/user_data_filled.json');
-      final data = json.decode(response);
-      setState(() {
-        trips = data['user']['trips'] ?? [];
-        isLoading = false;
-      });
-    } catch (e) {
-      print('Erreur lors du chargement des trips: $e');
-      setState(() {
-        isLoading = false;
-      });
-    }
+    // Utiliser le trip passé en paramètre
+    selectedTrip = widget.trip;
   }
 
   void _onNavBarTap(int index) {
@@ -86,29 +73,18 @@ class _my_tripState extends State<my_trip> {
 
                   const SizedBox(height: 30),
 
-                  // Boucle sur les trips
-                  if (trips.isEmpty)
+                  // Afficher le trip sélectionné
+                  if (selectedTrip == null)
                     const Center(
                       child: Text('Aucun voyage trouvé'),
                     )
                   else
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: trips.length,
-                        itemBuilder: (context, index) {
-                          final trip = trips[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 15.0),
-                            child: TripCard(
-                              title: trip['destination'] ?? 'Unknown',
-                              dateRange: 'From ${trip['startDate']} to ${trip['endDate']}',
-                              onTap: () {
-                                // Action au clic sur une carte de voyage
-                              },
-                            ),
-                          );
-                        },
-                      ),
+                    TripCard(
+                      title: selectedTrip['destination'] ?? 'Unknown',
+                      dateRange: 'From ${selectedTrip['startDate']} to ${selectedTrip['endDate']}',
+                      onTap: () {
+                        // Action au clic sur la carte de voyage
+                      },
                     ),
 
                   const SizedBox(height: 15),
@@ -117,7 +93,12 @@ class _my_tripState extends State<my_trip> {
                     icon: LucideIcons.map,
                     label: "Itinerary",
                     onTap: () {
-                      Navigator.pushNamed(context, '/map');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MapPage(trip: selectedTrip),
+                        ),
+                      );
                     },
                   ),
 

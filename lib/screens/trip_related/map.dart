@@ -3,7 +3,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({Key? key}) : super(key: key);
+  final dynamic trip; // Le trip sélectionné
+  const MapPage({Key? key, this.trip}) : super(key: key);
 
   @override
   State<MapPage> createState() => _MapPageState();
@@ -11,13 +12,22 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   late MapController mapController;
-
-  final LatLng _initialPosition = const LatLng(41.1579, -8.6291); // Porto, Portugal
+  // final LatLng _initialPosition = const LatLng(41.1579, -8.6291); // Porto, Portugal
+  // final LatLng _initialPosition = const LatLng(38.7223, -9.1393); // Lisboa, Portugal
+  late LatLng _initialPosition;
+  dynamic selectedTrip; 
 
   @override
   void initState() {
     super.initState();
     mapController = MapController();
+    selectedTrip = widget.trip;
+
+    _initialPosition = switch (selectedTrip?['destination']) {
+      'Porto' => const LatLng(41.1579, -8.6291),
+      'Lisboa' => const LatLng(38.7223, -9.1393),
+      _ => const LatLng(41.1579, -8.6291), // Défaut
+    };
   }
 
   @override

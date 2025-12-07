@@ -6,6 +6,7 @@ import '../../components/bottom_nav_bar.dart';
 import '../../components/floating_button.dart';
 import '../../components/trip_card.dart';
 import '../../constants/text_styles.dart';
+import '../trip_related/my_trip.dart';
 
 class trips extends StatefulWidget {
   const trips({super.key});
@@ -111,7 +112,12 @@ class _tripsState extends State<trips> {
                                 title: trip['destination'] ?? 'Unknown',
                                 dateRange: 'From ${trip['startDate']} to ${trip['endDate']}',
                                 onTap: () {
-                                  Navigator.pushNamed(context, '/my_trip');
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => my_trip(trip: trip),
+                                    ),
+                                  );
                                 },
                               ),
                             );
