@@ -14,11 +14,22 @@ class search extends StatefulWidget {
 
 class _searchState extends State<search> {
   int _selectedIndex = 1;
+  
+  List<dynamic> _searchResults = [];
+  bool _isLoading = false;
+  String _errorMessage = '';
 
   void _onNavBarTap(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  // Retirer au besoin  
+  @override
+  void initState() {
+    super.initState();
+    _searchResults = []; // Variable recheche initialisée ici
   }
 
   @override

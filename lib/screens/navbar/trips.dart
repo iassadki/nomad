@@ -7,6 +7,7 @@ import '../../components/floating_button.dart';
 import '../../components/trip_card.dart';
 import '../../constants/text_styles.dart';
 import '../trip_related/my_trip.dart';
+import '../../services/trips_state.dart';
 
 class trips extends StatefulWidget {
   const trips({super.key});
@@ -15,31 +16,68 @@ class trips extends StatefulWidget {
   State<trips> createState() => _tripsState();
 }
 
-class _tripsState extends State<trips> {
+class _tripsState extends State<trips> with WidgetsBindingObserver {
   int _selectedIndex = 0;
-  List<dynamic> trips = [];
+  late TripsState _trips;
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
+    _trips = TripsState();
+    WidgetsBinding.instance.addObserver(this);
     _loadTrips();
   }
 
-  Future<void> _loadTrips() async {
-    try {
-      final String response = await rootBundle.loadString('assets/api/user_data_filled.json');
-      final data = json.decode(response);
-      setState(() {
-        trips = data['user']['trips'] ?? [];
-        isLoading = false;
-      });
-    } catch (e) {
-      print('Erreur lors du chargement des trips: $e');
-      setState(() {
-        isLoading = false;
-      });
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      print('App resumed - reloading trips');
+      if (mounted) {
+        setState(() {});
+      }
     }
+  }
+
+  Future<void> _loadTrips() async {
+    await _trips.loadTrips();
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  void _deleteTrip(int tripId) {
+    _trips.deleteTrip(tripId);
+    setState(() {});
+  }
+
+  void _showDeleteDialog(int tripId, String destination) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Trip?'),
+        content: Text('Are you sure you want to delete the trip to $destination?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              _deleteTrip(tripId);
+              Navigator.pop(context);
+            },
+            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
   }
 
   void _onNavBarTap(int index) {
@@ -68,7 +106,7 @@ class _tripsState extends State<trips> {
                     const SizedBox(height: 24),
 
                     // Boucle sur les trips
-                    if (trips.isEmpty)
+                    if (_trips.trips.isEmpty)
                       Expanded(
                         child: Center(
                           child: Column(
@@ -103,22 +141,50 @@ class _tripsState extends State<trips> {
                     else
                       Expanded(
                         child: ListView.builder(
-                          itemCount: trips.length,
+                          itemCount: _trips.trips.length,
                           itemBuilder: (context, index) {
-                            final trip = trips[index];
+                            final trip = _trips.trips[index];
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 16.0),
-                              child: TripCard(
-                                title: trip['destination'] ?? 'Unknown',
-                                dateRange: 'From ${trip['startDate']} to ${trip['endDate']}',
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => my_trip(trip: trip),
+                              child: Stack(
+                                children: [
+                                  TripCard(
+                                    title: trip['destination'] ?? 'Unknown',
+                                    dateRange: 'From ${trip['startDate']} to ${trip['endDate']}',
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => my_trip(trip: trip),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  Positioned(
+                                    top: 10,
+                                    right: 10,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        _showDeleteDialog(
+                                          trip['tripId'] ?? index,
+                                          trip['destination'] ?? 'Unknown',
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
+                                        padding: const EdgeInsets.all(8),
+                                        child: const Icon(
+                                          Icons.close,
+                                          color: Colors.white,
+                                          size: 18,
+                                        ),
+                                      ),
                                     ),
-                                  );
-                                },
+                                  ),
+                                ],
                               ),
                             );
                           },

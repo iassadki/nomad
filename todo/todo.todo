@@ -1,5 +1,16 @@
 ☐ Se connecter 
-☐ Creer un voyage
+
+--- Trips
+☐ Creer un voyage (le faire fonctionner)
+
+--- Search
+☐ Faire la recherche de lieux depuis l'API interne
+☐ Mettre des lieux que l'on recherche en favoris
+☐ MAJ le profil utilisateur avec les bonnes valeurs
+
+--- Favoris
 ☐ Lier le voyage a la personne et au voyage en question
+
+--- Favoris
+☐ Creer une note of the trip
 ☐ Creer un utilisateur
-☐ Afficher les notes du trip
