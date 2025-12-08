@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../components/bottom_nav_bar.dart';
 import '../../components/input_text_field.dart';
+import '../../components/place_card.dart';
 import '../../constants/text_styles.dart';
-
+import '../../services/places_service.dart';
 
 class search extends StatefulWidget {
   const search({super.key});
@@ -18,6 +19,7 @@ class _searchState extends State<search> {
   List<dynamic> _searchResults = [];
   bool _isLoading = false;
   String _errorMessage = '';
+  final TextEditingController _searchController = TextEditingController();
 
   void _onNavBarTap(int index) {
     setState(() {
@@ -25,11 +27,36 @@ class _searchState extends State<search> {
     });
   }
 
-  // Retirer au besoin  
   @override
   void initState() {
     super.initState();
-    _searchResults = []; // Variable recheche initialisée ici
+    _searchResults = [];
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _performSearch(String query) async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = '';
+    });
+
+    try {
+      final results = await PlacesService.searchPlaces(query);
+      setState(() {
+        _searchResults = results;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Erreur lors de la recherche: $e';
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -42,22 +69,67 @@ class _searchState extends State<search> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 100),
-            // CustomBackButton(margin: const EdgeInsets.only(top: 10, right: 15)),
 
             const Text(
               'Search',
               style: TextStyles.h1,
             ),
 
+            const SizedBox(height: 20),
+
             InputTextField(
-              hintText: 'Rechercher...',
+              controller: _searchController,
+              hintText: 'Rechercher un lieu...',
               icon: LucideIcons.search,
               iconColor: Colors.blue,
               onChanged: (value) {
-                print('Recherche: $value');
+                _performSearch(value);
               },
             ),
+
             const SizedBox(height: 20),
+
+            if (_isLoading)
+              const Center(
+                child: CircularProgressIndicator(),
+              )
+            else if (_errorMessage.isNotEmpty)
+              Center(
+                child: Text(
+                  _errorMessage,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              )
+            else if (_searchResults.isEmpty && _searchController.text.isNotEmpty)
+              const Center(
+                child: Text('Aucun résultat trouvé'),
+              )
+            else if (_searchResults.isEmpty)
+              const Center(
+                child: Text('Tapez pour rechercher des lieux'),
+              )
+            else
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _searchResults.length,
+                  itemBuilder: (context, index) {
+                    final place = _searchResults[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: PlaceCard(
+                        title: place['placeName'] ?? 'Lieu inconnu',
+                        subtitle: place['city'] ?? 'Ville inconnue',
+                        onTap: () {
+                          print('Lieu sélectionné: ${place['placeName']}');
+                        },
+                        onFavoriteToggle: () {
+                          print('Ajouté aux favoris: ${place['placeName']}');
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
           ],
         ),
       ),
