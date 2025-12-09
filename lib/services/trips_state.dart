@@ -1,8 +1,9 @@
 import 'dart:convert';
-import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 class TripsState {
   static final TripsState _instance = TripsState._internal();
+  static const String baseUrl = 'http://localhost:8080/api';
   
   List<Map<String, dynamic>> _trips = [];
 
@@ -16,17 +17,19 @@ class TripsState {
 
   Future<void> loadTrips() async {
     try {
-      if (_trips.isEmpty) {
-        // Charger depuis les assets seulement la première fois
-        final String response = await rootBundle.loadString('assets/api/user_data_filled.json');
-        final data = json.decode(response);
-        final tripsData = data['user']['trips'] ?? [];
+      final response = await http.get(Uri.parse('$baseUrl/trips'));
+      
+      if (response.statusCode == 200) {
+        final tripsData = jsonDecode(response.body) as List;
         
         _trips = List<Map<String, dynamic>>.from(
           tripsData.map((trip) => Map<String, dynamic>.from(trip as Map))
         );
         
-        print('Loaded ${_trips.length} trips from assets');
+        print('Loaded ${_trips.length} trips from API');
+      } else {
+        print('Error loading trips: ${response.statusCode}');
+        _trips = [];
       }
     } catch (e) {
       print('Error loading trips: $e');
@@ -34,23 +37,43 @@ class TripsState {
     }
   }
 
-  void addTrip(Map<String, dynamic> newTrip) {
-    // Générer un ID unique
-    final int maxId = _trips.isEmpty
-        ? 0
-        : _trips.map<int>((trip) => (trip['tripId'] as int?) ?? 0).reduce((a, b) => a > b ? a : b);
+  Future<void> addTrip(Map<String, dynamic> newTrip) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/trips'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(newTrip),
+      );
 
-    newTrip['tripId'] = maxId + 1;
-    _trips.add(newTrip);
-    
-    print('Trip added: ${newTrip['destination']}');
-    print('Total trips: ${_trips.length}');
+      if (response.statusCode == 201) {
+        final createdTrip = jsonDecode(response.body) as Map<String, dynamic>;
+        _trips.add(createdTrip);
+        print('Trip added via API: ${newTrip['destination']}');
+        print('Total trips: ${_trips.length}');
+      } else {
+        print('Error adding trip: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error adding trip: $e');
+    }
   }
 
-  void deleteTrip(int tripId) {
-    _trips.removeWhere((trip) => trip['tripId'] == tripId);
-    print('Trip deleted with ID: $tripId');
-    print('Total trips: ${_trips.length}');
+  Future<void> deleteTrip(int tripId) async {
+    try {
+      final response = await http.delete(
+        Uri.parse('$baseUrl/trips/$tripId'),
+      );
+
+      if (response.statusCode == 200) {
+        _trips.removeWhere((trip) => trip['tripId'] == tripId);
+        print('Trip deleted via API with ID: $tripId');
+        print('Total trips: ${_trips.length}');
+      } else {
+        print('Error deleting trip: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error deleting trip: $e');
+    }
   }
 
   void clearAll() {

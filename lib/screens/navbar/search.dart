@@ -20,6 +20,7 @@ class _searchState extends State<search> {
   bool _isLoading = false;
   String _errorMessage = '';
   final TextEditingController _searchController = TextEditingController();
+  Set<String> _favorites = {}; // Suivi des favoris
 
   void _onNavBarTap(int index) {
     setState(() {
@@ -57,6 +58,28 @@ class _searchState extends State<search> {
         _isLoading = false;
       });
     }
+  }
+
+  void _toggleFavorite(String placeId) {
+    setState(() {
+      if (_favorites.contains(placeId)) {
+        _favorites.remove(placeId);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Retiré des favoris'),
+            duration: Duration(seconds: 1),
+          ),
+        );
+      } else {
+        _favorites.add(placeId);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Ajouté aux favoris'),
+            duration: Duration(seconds: 1),
+          ),
+        );
+      }
+    });
   }
 
   @override
@@ -114,16 +137,20 @@ class _searchState extends State<search> {
                   itemCount: _searchResults.length,
                   itemBuilder: (context, index) {
                     final place = _searchResults[index];
+                    final placeId = place['id'].toString();
+                    final isFavorite = _favorites.contains(placeId);
+                    
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 16.0),
                       child: PlaceCard(
                         title: place['placeName'] ?? 'Lieu inconnu',
                         subtitle: place['city'] ?? 'Ville inconnue',
+                        isFavorite: isFavorite,
                         onTap: () {
                           print('Lieu sélectionné: ${place['placeName']}');
                         },
                         onFavoriteToggle: () {
-                          print('Ajouté aux favoris: ${place['placeName']}');
+                          _toggleFavorite(placeId);
                         },
                       ),
                     );

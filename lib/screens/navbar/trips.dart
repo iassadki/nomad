@@ -46,7 +46,10 @@ class _tripsState extends State<trips> with WidgetsBindingObserver {
   }
 
   Future<void> _loadTrips() async {
+    print('DEBUG: Starting to load trips...');
     await _trips.loadTrips();
+    print('DEBUG: Trips loaded: ${_trips.trips.length} trips');
+    print('DEBUG: Trips data: ${_trips.trips}');
     setState(() {
       isLoading = false;
     });
