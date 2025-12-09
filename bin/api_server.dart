@@ -94,18 +94,7 @@ Map<String, dynamic> userData = {
         "startingAddress": null
       }
     ],
-    "favoritePlaces": [
-      {
-        "id": 1,
-        "placeName": "Estádio do Dragão",
-        "city": "Porto"
-      },
-      {
-        "id": 2,
-        "placeName": "Praça do Comércio",
-        "city": "Lisboa"
-      }
-    ],
+    "favoritePlaces": [],
     "notesOfTheTrip": [
       {
         "noteId": 1,

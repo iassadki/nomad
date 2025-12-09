@@ -76,4 +76,38 @@ class UserService {
       return [];
     }
   }
+
+  static Future<void> removeFavorite(int favoriteId) async {
+    try {
+      final response = await http.delete(
+        Uri.parse('$baseUrl/favorites/$favoriteId'),
+      );
+
+      if (response.statusCode == 200) {
+        print('Favorite $favoriteId removed successfully');
+      } else {
+        print('Error removing favorite: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error removing favorite: $e');
+    }
+  }
+
+  static Future<void> addFavorite(Map<String, dynamic> favorite) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/favorites'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(favorite),
+      );
+
+      if (response.statusCode == 201) {
+        print('Favorite added successfully');
+      } else {
+        print('Error adding favorite: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error adding favorite: $e');
+    }
+  }
 }

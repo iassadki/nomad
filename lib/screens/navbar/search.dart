@@ -5,6 +5,7 @@ import '../../components/input_text_field.dart';
 import '../../components/place_card.dart';
 import '../../constants/text_styles.dart';
 import '../../services/places_service.dart';
+import '../../services/user_service.dart';
 
 class search extends StatefulWidget {
   const search({super.key});
@@ -31,6 +32,7 @@ class _searchState extends State<search> {
   @override
   void initState() {
     super.initState();
+    _favorites = {};
     _searchResults = [];
   }
 
@@ -60,26 +62,35 @@ class _searchState extends State<search> {
     }
   }
 
-  void _toggleFavorite(String placeId) {
-    setState(() {
-      if (_favorites.contains(placeId)) {
-        _favorites.remove(placeId);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Retiré des favoris'),
-            duration: Duration(seconds: 1),
-          ),
-        );
-      } else {
-        _favorites.add(placeId);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Ajouté aux favoris'),
-            duration: Duration(seconds: 1),
-          ),
-        );
-      }
-    });
+  void _toggleFavorite(Map<String, dynamic> place) {
+    final placeId = place['id'].toString();
+    
+    if (_favorites.contains(placeId)) {
+      // Retirer des favoris
+      _favorites.remove(placeId);
+      UserService.removeFavorite(place['id']);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Retiré des favoris'),
+          duration: Duration(seconds: 1),
+        ),
+      );
+    } else {
+      // Ajouter aux favoris
+      _favorites.add(placeId);
+      UserService.addFavorite({
+        'id': place['id'],
+        'placeName': place['placeName'],
+        'city': place['city'],
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Ajouté aux favoris'),
+          duration: Duration(seconds: 1),
+        ),
+      );
+    }
+    setState(() {});
   }
 
   @override
@@ -150,7 +161,7 @@ class _searchState extends State<search> {
                           print('Lieu sélectionné: ${place['placeName']}');
                         },
                         onFavoriteToggle: () {
-                          _toggleFavorite(placeId);
+                          _toggleFavorite(place);
                         },
                       ),
                     );
