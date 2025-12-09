@@ -1,0 +1,40 @@
+{
+    "cities": {
+        "lisboa": {
+            "places": [
+                {
+                    "id": 1,
+                    "placeName": "Torre de Belém"
+                },
+                {
+                    "id": 2,
+                    "placeName": "Mosteiro dos Jerónimos"
+                },
+                {
+                    "id": 3,
+                    "placeName": "Castelo de São Jorge"
+                },
+                {
+                    "id": 4,
+                    "placeName": "Azulejo Tradicional"
+                },
+                {
+                    "id": 5,
+                    "placeName": "Praça do Comércio"
+                },
+                {
+                    "id": 6,
+                    "placeName": "Elevador de Santa Justa"
+                },
+                {
+                    "id": 7,
+                    "placeName": "Museu Calouste Gulbenkian"
+                },
+                {
+                    "id": 8,
+                    "placeName": "Bairro Alto"
+                }
+            ]
+        }
+    }
+}
