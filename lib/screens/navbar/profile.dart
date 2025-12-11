@@ -3,6 +3,7 @@ import '../../components/bottom_nav_bar.dart';
 import '../../constants/text_styles.dart';
 import '../../components/trip_card.dart';
 import '../../components/button_primary.dart';
+import '../../services/user_service.dart';
 
 class profile extends StatefulWidget {
   const profile({super.key});
@@ -13,6 +14,30 @@ class profile extends StatefulWidget {
 
 class _profileState extends State<profile> {
   int _selectedIndex = 3;
+  String _userName = 'Loading...';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    try {
+      final user = await UserService.getUser();
+      
+      if (user != null) {
+        print('Username: ${user['username']}');
+        setState(() {
+          _userName = user['username'] ?? 'Unknown';
+        });
+      } else {
+        print('DEBUG: User is null!');
+      }
+    } catch (e) {
+      print('DEBUG: Error: $e');
+    }
+  }
 
   void _onNavBarTap(int index) {
     setState(() {
@@ -42,8 +67,8 @@ class _profileState extends State<profile> {
 
             const Text('Name', style: TextStyles.h4),
             
-            const Text(
-              'Ilias ASSADKI',
+            Text(
+              _userName,
               style: TextStyle(fontSize: 14, color: Colors.black87),
             ),
 
