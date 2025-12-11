@@ -78,22 +78,7 @@ Map<String, dynamic> userData = {
     "id": 1,
     "username": "c.carvalho",
     "password": "carvalho123",
-    "trips": [
-      {
-        "tripId": 1,
-        "destination": "Porto",
-        "startDate": "2025-12-20",
-        "endDate": "2026-01-03",
-        "startingAddress": null
-      },
-      {
-        "tripId": 2,
-        "destination": "Lisboa",
-        "startDate": "2025-12-20",
-        "endDate": "2026-01-03",
-        "startingAddress": null
-      }
-    ],
+    "trips": [],
     "favoritePlaces": [],
     "notesOfTheTrip": [
       {
