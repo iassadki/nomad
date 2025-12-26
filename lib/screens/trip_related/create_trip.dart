@@ -68,7 +68,7 @@ class _create_tripState extends State<create_trip> {
       'destination': _selectedDestination,
       'startDate': _startDateController.text,
       'endDate': _endDateController.text,
-      'startingAddress': _startAddressController.text.isEmpty ? null : _startAddressController.text,
+      // 'startingAddress': _startAddressController.text.isEmpty ? null : _startAddressController.text,
       'latitude': coordinates[_selectedDestination]?['latitude'] ?? 0.0,
       'longitude': coordinates[_selectedDestination]?['longitude'] ?? 0.0,
     };
@@ -160,17 +160,17 @@ class _create_tripState extends State<create_trip> {
 
             const SizedBox(height: 20),
 
-            const Text('Starting address (optional)', style: TextStyles.h4),
+            // const Text('Starting address (optional)', style: TextStyles.h4),
 
-            InputTextField(
-              controller: _startAddressController,
-              hintText: 'Starting address',
-              icon: LucideIcons.search,
-              iconColor: Colors.blue,
-              onChanged: (value) {
-                print('Recherche: $value');
-              },
-            ),
+            // InputTextField(
+            //   controller: _startAddressController,
+            //   hintText: 'Starting address',
+            //   icon: LucideIcons.search,
+            //   iconColor: Colors.blue,
+            //   onChanged: (value) {
+            //     print('Recherche: $value');
+            //   },
+            // ),
 
             const SizedBox(height: 20),
 
