@@ -34,6 +34,27 @@ class _searchState extends State<search> {
     super.initState();
     _favorites = {};
     _searchResults = [];
+    _loadAllPlaces();
+  }
+
+  Future<void> _loadAllPlaces() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = '';
+    });
+
+    try {
+      final results = await PlacesService.searchPlaces('');
+      setState(() {
+        _searchResults = results;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Erreur lors du chargement des lieux: $e';
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -134,13 +155,9 @@ class _searchState extends State<search> {
                   style: const TextStyle(color: Colors.red),
                 ),
               )
-            else if (_searchResults.isEmpty && _searchController.text.isNotEmpty)
-              const Center(
-                child: Text('Aucun résultat trouvé'),
-              )
             else if (_searchResults.isEmpty)
               const Center(
-                child: Text('Tapez pour rechercher des lieux'),
+                child: Text('Aucun lieu trouvé'),
               )
             else
               Expanded(
