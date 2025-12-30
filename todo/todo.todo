@@ -16,6 +16,3 @@
 
 --- Ajouter un test de creation de voyage au lieu de le faire en front, ça a un nom en trois lettre mais j'ai oublié lequel
 [ ] Truc de test de création de voyage et SUCCESS or ERROR
-
---- Bonnes pratiques
-[ ] Changer les noms de classe des fichiers pour qu'ils soient en camelCase (respecter la casse Flutter)
