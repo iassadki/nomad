@@ -8,14 +8,14 @@ import '../../services/user_service.dart';
 import '../../services/trips_state.dart';
 import '../trip_related/my_trip.dart';
 
-class profile extends StatefulWidget {
-  const profile({super.key});
+class Profile extends StatefulWidget {
+  const Profile({super.key});
 
   @override
-  State<profile> createState() => _profileState();
+  State<Profile> createState() => _ProfileState();
 }
 
-class _profileState extends State<profile> with WidgetsBindingObserver {
+class _ProfileState extends State<Profile> with WidgetsBindingObserver {
   int _selectedIndex = 3;
   String _userName = 'Loading...';
   late TripsState _trips;

@@ -28,22 +28,22 @@ class _MyAppState extends State<MyApp> {
         page = const Login();
         break;
       case '/trips':
-        page = const trips();
+        page = const Trips();
         break;
       case '/search':
-        page = const search();
+        page = const Search();
         break;
       case '/favorites':
-        page = const favorites();
+        page = const Favorites();
         break;
       case '/profile':
-        page = const profile();
+        page = const Profile();
         break;
       case '/my_trip':
         page = const my_trip();
         break;
       case '/create_trip':
-        page = const create_trip();
+        page = const CreateTrip();
         break;
       case '/map':
         page = const map_page.MapPage();

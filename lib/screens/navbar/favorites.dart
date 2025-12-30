@@ -4,14 +4,14 @@ import '../../components/place_card.dart';
 import '../../constants/text_styles.dart';
 import '../../services/user_service.dart';
 
-class favorites extends StatefulWidget {
-  const favorites({super.key});
+class Favorites extends StatefulWidget {
+  const Favorites({super.key});
 
   @override
-  State<favorites> createState() => _favoritesState();
+  State<Favorites> createState() => _FavoritesState();
 }
 
-class _favoritesState extends State<favorites> {
+class _FavoritesState extends State<Favorites> {
   int _selectedIndex = 2;
   List<dynamic> _favoritesList = [];
   bool _isLoading = true;
@@ -36,13 +36,13 @@ class _favoritesState extends State<favorites> {
         _favoritesList = favorites;
         _isLoading = false;
       });
-      print('Loaded ${favorites.length} favorites');
+      print('Loaded ${favorites.length} Favorites');
     } catch (e) {
       setState(() {
         _errorMessage = 'Erreur lors du chargement: $e';
         _isLoading = false;
       });
-      print('Error loading favorites: $e');
+      print('Error loading Favorites: $e');
     }
   }
 

@@ -10,7 +10,7 @@ class InputTextField extends StatelessWidget {
 
   const InputTextField({
     super.key,
-    this.hintText = 'Enter a search term',
+    this.hintText = 'Enter a Search term',
     this.icon = LucideIcons.search,
     this.iconColor = const Color.fromARGB(255, 0, 0, 0),
     this.controller,

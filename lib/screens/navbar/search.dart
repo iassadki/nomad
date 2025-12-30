@@ -7,14 +7,14 @@ import '../../constants/text_styles.dart';
 import '../../services/places_service.dart';
 import '../../services/user_service.dart';
 
-class search extends StatefulWidget {
-  const search({super.key});
+class Search extends StatefulWidget {
+  const Search({super.key});
 
   @override
-  State<search> createState() => _searchState();
+  State<Search> createState() => _SearchState();
 }
 
-class _searchState extends State<search> {
+class _SearchState extends State<Search> {
   int _selectedIndex = 1;
   
   List<dynamic> _searchResults = [];

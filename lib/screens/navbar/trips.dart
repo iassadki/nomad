@@ -9,14 +9,14 @@ import '../../constants/text_styles.dart';
 import '../trip_related/my_trip.dart';
 import '../../services/trips_state.dart';
 
-class trips extends StatefulWidget {
-  const trips({super.key});
+class Trips extends StatefulWidget {
+  const Trips({super.key});
 
   @override
-  State<trips> createState() => _tripsState();
+  State<Trips> createState() => _TripsState();
 }
 
-class _tripsState extends State<trips> with WidgetsBindingObserver {
+class _TripsState extends State<Trips> with WidgetsBindingObserver {
   int _selectedIndex = 0;
   late TripsState _trips;
   bool isLoading = true;

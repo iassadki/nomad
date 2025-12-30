@@ -10,14 +10,14 @@ import '../../components/floating_button.dart';
 import '../../components/button_primary.dart';
 import '../../services/trips_state.dart';
 
-class create_trip extends StatefulWidget {
-  const create_trip({super.key});
+class CreateTrip extends StatefulWidget {
+  const CreateTrip({super.key});
 
   @override
-  State<create_trip> createState() => _create_tripState();
+  State<CreateTrip> createState() => _CreateTripState();
 }
 
-class _create_tripState extends State<create_trip> {
+class _CreateTripState extends State<CreateTrip> {
   int _selectedIndex = 0;
 
   // ⬇️ AJOUTE CETTE LIGNE POUR LE DROPDOWN ⬇️
@@ -117,7 +117,7 @@ class _create_tripState extends State<create_trip> {
             Align(
               alignment: Alignment.centerLeft,
               child: FloatingButton(
-                navigationRoute: '/create_trip',
+                navigationRoute: '/CreateTrip',
                 child: Icon(LucideIcons.chevronLeft, color: Colors.white),
               ),
             ),
