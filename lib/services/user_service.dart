@@ -110,4 +110,58 @@ class UserService {
       print('Error adding favorite: $e');
     }
   }
+
+  static Future<void> saveNote(int tripId, String noteText) async {
+    try {
+      print('DEBUG: Saving note for trip $tripId');
+      print('DEBUG: Note text: "$noteText"');
+      
+      final response = await http.post(
+        Uri.parse('$baseUrl/trips/$tripId/notes'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'noteText': noteText,
+        }),
+      );
+
+      print('DEBUG: Save note response status: ${response.statusCode}');
+      print('DEBUG: Save note response body: ${response.body}');
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        print('Note saved successfully for trip $tripId');
+      } else {
+        print('Error saving note: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error saving note: $e');
+    }
+  }
+
+  static Future<String> getNote(int tripId) async {
+    try {
+      print('DEBUG: Fetching note from API for trip $tripId');
+      final response = await http.get(
+        Uri.parse('$baseUrl/trips/$tripId/notes'),
+      );
+
+      print('DEBUG: Note API response status: ${response.statusCode}');
+      print('DEBUG: Note API response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        final noteText = data['noteText'] ?? '';
+        print('Loaded note for trip $tripId: "$noteText"');
+        return noteText;
+      } else if (response.statusCode == 404) {
+        print('No note found for trip $tripId (404)');
+        return '';
+      } else {
+        print('Error loading note: ${response.statusCode}');
+        return '';
+      }
+    } catch (e) {
+      print('Error loading note: $e');
+      return '';
+    }
+  }
 }

@@ -110,7 +110,7 @@ class _my_tripState extends State<my_trip> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => NotesPage()),
+                        MaterialPageRoute(builder: (context) => NotesPage(trip: widget.trip)),
                       );
                     },
                   ),

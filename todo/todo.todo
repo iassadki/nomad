@@ -5,14 +5,14 @@
 [ ] Passer toute l'application en anglais
 
 --- Favoris
-[ ] Lier le voyage a la personne et au voyage en question
+//[ ] Lier le voyage a la personne et au voyage en question
 
 --- Page Trip
-[ ] Creer une note of the trip
+[ ] Creer une note of the trip fonctionnelle
 //[ ] Creer un utilisateur
 
 --- Profile
-[ ] Bien gerer la suppression du truc en actualisant la page 2/3 secondes après l'action ??
+//[ ] Bien gerer la suppression du truc en actualisant la page 2/3 secondes après l'action ??
 
 --- Ajouter un test de creation de voyage au lieu de le faire en front, ça a un nom en trois lettre mais j'ai oublié lequel
 [ ] Truc de test de création de voyage et SUCCESS or ERROR
