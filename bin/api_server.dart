@@ -37,14 +37,20 @@ void handleRequest(HttpRequest request) {
       handleGetPlacesByCity(request);
     } else if (path == '/api/favorites') {
       handleGetFavorites(request);
+    } else if (path.startsWith('/api/trips/') && path.endsWith('/notes')) {
+      handleGetNote(request);
     } else {
       notFound(request);
     }
   } else if (method == 'POST') {
-    if (path == '/api/trips') {
+    if (path == '/api/login') {
+      handleLogin(request);
+    } else if (path == '/api/trips') {
       handleCreateTrip(request);
     } else if (path == '/api/favorites') {
       handleAddFavorite(request);
+    } else if (path.startsWith('/api/trips/') && path.endsWith('/notes')) {
+      handleSaveNote(request);
     } else {
       notFound(request);
     }
@@ -73,31 +79,64 @@ void methodNotAllowed(HttpRequest request) {
   request.response.close();
 }
 
-Map<String, dynamic> userData = {
-  "user": {
-    "id": 1,
-    "username": "c.carvalho",
-    "password": "carvalho123",
-    "trips": [],
-    "favoritePlaces": [],
-    "notesOfTheTrip": [
-      {
-        "noteId": 1,
-        "tripId": 1,
-        "title": "Note 1",
-        "content": "Texte de la note…",
-        "createdAt": "2025-11-26T12:00:00Z"
-      },
-      {
-        "noteId": 2,
-        "tripId": 1,
-        "title": "Note 2",
-        "content": "Autre note…",
-        "createdAt": "2025-11-27T10:10:00Z"
-      }
-    ]
-  }
-};
+
+
+// Base de données des utilisateurs
+// Map<int, Map<String, dynamic>> usersDatabase = {
+//   1: {
+//     "id": 1,
+//     "username": "c.carvalho",
+//     "password": "carvalho123",
+//     "email": "carvalho@example.com",
+//     "trips": [
+//       {
+//         "tripId": 1,
+//         "destination": "Porto",
+//         "startDate": "2025-12-20",
+//         "endDate": "2026-01-03"
+//       },
+//       {
+//         "tripId": 2,
+//         "destination": "Lisboa",
+//         "startDate": "2025-12-20",
+//         "endDate": "2026-01-03"
+//       }
+//     ],
+//     "favoritePlaces": [
+//       {"id": 1, "placeName": "Ribeira", "city": "Porto"},
+//       {"id": 2, "placeName": "Torre de Belém", "city": "Lisboa"}
+//     ],
+//     "notesOfTheTrip": []
+//   },
+//   2: {
+//     "id": 2,
+//     "username": "exampleUser",
+//     "password": "examplePassword",
+//     "email": "example@example.com",
+//     "trips": [
+//       {
+//         "tripId": 1,
+//         "destination": "Porto",
+//         "startDate": "2025-12-20",
+//         "endDate": "2026-01-03"
+//       },
+//       {
+//         "tripId": 2,
+//         "destination": "Lisboa",
+//         "startDate": "2025-12-20",
+//         "endDate": "2026-01-03"
+//       }
+//     ],
+//     "favoritePlaces": [
+//       {"id": 1, "placeName": "Estádio do Dragão", "city": "Porto"},
+//       {"id": 2, "placeName": "Praça do Comércio", "city": "Lisboa"}
+//     ],
+//     "notesOfTheTrip": []
+//   }
+// };
+
+// Utilisateur actuellement connecté (par session)
+int? currentUserId;
 
 Map<String, dynamic> placesData = {
   "cities": {
@@ -127,26 +166,125 @@ Map<String, dynamic> placesData = {
 };
 
 void handleGetUser(HttpRequest request) {
+  if (currentUserId == null) {
+    request.response.statusCode = 401;
+    request.response.write(jsonEncode({'error': 'Not authenticated'}));
+    request.response.close();
+    return;
+  }
+  
+  // final user = usersDatabase[currentUserId];
+  // if (user == null) {
+  //   request.response.statusCode = 404;
+  //   request.response.write(jsonEncode({'error': 'User not found'}));
+  //   request.response.close();
+  //   return;
+  // }
+  
   request.response.statusCode = 200;
-  request.response.write(jsonEncode(userData));
+  request.response.write(jsonEncode({'user': user}));
   request.response.close();
 }
 
-void handleGetTrips(HttpRequest request) {
-  request.response.statusCode = 200;
-  request.response.write(jsonEncode(userData["user"]["trips"]));
-  request.response.close();
-}
-
-void handleCreateTrip(HttpRequest request) {
+void handleLogin(HttpRequest request) {
   StringBuffer buffer = StringBuffer();
   request.listen(
     (List<int> chunk) => buffer.write(utf8.decode(chunk)),
     onDone: () {
       try {
+        final data = jsonDecode(buffer.toString());
+        final email = data['email'] ?? '';
+        final username = data['username'] ?? '';
+        final password = data['password'] ?? '';
+
+        print('LOGIN ATTEMPT: email=$email, username=$username, password=$password');
+
+        // Chercher l'utilisateur
+        int? userId;
+        for (var entry in usersDatabase.entries) {
+          final user = entry.value;
+          print('Checking user: ${user['username']} with password ${user['password']}');
+          if ((user['username'] == username || user['email'] == email) && user['password'] == password) {
+            userId = entry.key;
+            print('FOUND MATCHING USER: $userId');
+            break;
+          }
+        }
+
+        if (userId == null) {
+          print('NO MATCHING USER FOUND');
+          request.response.statusCode = 401;
+          request.response.write(jsonEncode({'error': 'Invalid credentials'}));
+          request.response.close();
+          return;
+        }
+
+        currentUserId = userId;
+        final user = usersDatabase[userId]!;
+
+        print('LOGIN SUCCESS: User $userId connected');
+        request.response.statusCode = 200;
+        request.response.write(jsonEncode({
+          'user': user,
+          'token': 'token_$userId',
+          'message': 'Login successful'
+        }));
+        request.response.close();
+      } catch (e) {
+        print('LOGIN ERROR: $e');
+        request.response.statusCode = 400;
+        request.response.write(jsonEncode({'error': 'Invalid data: $e'}));
+        request.response.close();
+      }
+    },
+  );
+}
+
+void handleGetTrips(HttpRequest request) {
+  if (currentUserId == null) {
+    request.response.statusCode = 401;
+    request.response.write(jsonEncode({'error': 'Not authenticated'}));
+    request.response.close();
+    return;
+  }
+
+  final user = usersDatabase[currentUserId];
+  if (user == null) {
+    request.response.statusCode = 404;
+    request.response.write(jsonEncode({'error': 'User not found'}));
+    request.response.close();
+    return;
+  }
+
+  request.response.statusCode = 200;
+  request.response.write(jsonEncode(user["trips"]));
+  request.response.close();
+}
+
+void handleCreateTrip(HttpRequest request) {
+  if (currentUserId == null) {
+    request.response.statusCode = 401;
+    request.response.write(jsonEncode({'error': 'Not authenticated'}));
+    request.response.close();
+    return;
+  }
+
+  StringBuffer buffer = StringBuffer();
+  request.listen(
+    (List<int> chunk) => buffer.write(utf8.decode(chunk)),
+    onDone: () {
+      try {
+        final user = usersDatabase[currentUserId];
+        if (user == null) {
+          request.response.statusCode = 404;
+          request.response.write(jsonEncode({'error': 'User not found'}));
+          request.response.close();
+          return;
+        }
+
         final newTrip = jsonDecode(buffer.toString());
-        final trips = userData["user"]["trips"] as List;
-        final newId = (trips.map((t) => t["tripId"] as int).fold(0, (a, b) => a > b ? a : b)) + 1;
+        final trips = user["trips"] as List;
+        final newId = (trips.isEmpty ? 0 : (trips.map((t) => t["tripId"] as int).reduce((a, b) => a > b ? a : b))) + 1;
         newTrip["tripId"] = newId;
         trips.add(newTrip);
         request.response.statusCode = 201;
@@ -162,6 +300,13 @@ void handleCreateTrip(HttpRequest request) {
 }
 
 void handleDeleteTrip(HttpRequest request) {
+  if (currentUserId == null) {
+    request.response.statusCode = 401;
+    request.response.write(jsonEncode({'error': 'Not authenticated'}));
+    request.response.close();
+    return;
+  }
+
   final id = int.tryParse(request.uri.pathSegments.last);
   if (id == null) {
     request.response.statusCode = 400;
@@ -169,7 +314,16 @@ void handleDeleteTrip(HttpRequest request) {
     request.response.close();
     return;
   }
-  final trips = userData["user"]["trips"] as List;
+
+  final user = usersDatabase[currentUserId];
+  if (user == null) {
+    request.response.statusCode = 404;
+    request.response.write(jsonEncode({'error': 'User not found'}));
+    request.response.close();
+    return;
+  }
+
+  final trips = user["trips"] as List;
   final index = trips.indexWhere((t) => t["tripId"] == id);
   if (index == -1) {
     request.response.statusCode = 404;
@@ -203,20 +357,130 @@ void handleGetPlacesByCity(HttpRequest request) {
   request.response.close();
 }
 
-void handleGetFavorites(HttpRequest request) {
-  request.response.statusCode = 200;
-  request.response.write(jsonEncode(userData["user"]["favoritePlaces"]));
+void handleGetNote(HttpRequest request) {
+  if (currentUserId == null) {
+    request.response.statusCode = 401;
+    request.response.write(jsonEncode({'error': 'Not authenticated'}));
+    request.response.close();
+    return;
+  }
+
+  final pathSegments = request.uri.pathSegments;
+  final tripId = int.tryParse(pathSegments[2]);
+  
+  if (tripId == null) {
+    request.response.statusCode = 400;
+    request.response.write(jsonEncode({'error': 'Invalid trip ID'}));
+    request.response.close();
+    return;
+  }
+
+  final user = usersDatabase[currentUserId];
+  if (user == null) {
+    request.response.statusCode = 404;
+    request.response.write(jsonEncode({'error': 'User not found'}));
+    request.response.close();
+    return;
+  }
+
+  // Pour maintenant, les notes sont stockées localement (SharedPreferences)
+  // Cette endpoint est juste un placeholder
+  request.response.statusCode = 404;
+  request.response.write(jsonEncode({'error': 'Not found'}));
   request.response.close();
 }
 
-void handleAddFavorite(HttpRequest request) {
+void handleSaveNote(HttpRequest request) {
+  if (currentUserId == null) {
+    request.response.statusCode = 401;
+    request.response.write(jsonEncode({'error': 'Not authenticated'}));
+    request.response.close();
+    return;
+  }
+
+  final pathSegments = request.uri.pathSegments;
+  final tripId = int.tryParse(pathSegments[2]);
+  
+  if (tripId == null) {
+    request.response.statusCode = 400;
+    request.response.write(jsonEncode({'error': 'Invalid trip ID'}));
+    request.response.close();
+    return;
+  }
+
   StringBuffer buffer = StringBuffer();
   request.listen(
     (List<int> chunk) => buffer.write(utf8.decode(chunk)),
     onDone: () {
       try {
+        final user = usersDatabase[currentUserId];
+        if (user == null) {
+          request.response.statusCode = 404;
+          request.response.write(jsonEncode({'error': 'User not found'}));
+          request.response.close();
+          return;
+        }
+
+        final noteData = jsonDecode(buffer.toString());
+        
+        // Pour maintenant, on retourne juste un succès
+        // Les notes sont stockées localement (SharedPreferences)
+        request.response.statusCode = 200;
+        request.response.write(jsonEncode({'message': 'Note saved', 'noteText': noteData['noteText']}));
+        request.response.close();
+      } catch (e) {
+        request.response.statusCode = 400;
+        request.response.write(jsonEncode({'error': 'Invalid data'}));
+        request.response.close();
+      }
+    },
+  );
+}
+
+void handleGetFavorites(HttpRequest request) {
+  if (currentUserId == null) {
+    request.response.statusCode = 401;
+    request.response.write(jsonEncode({'error': 'Not authenticated'}));
+    request.response.close();
+    return;
+  }
+
+  final user = usersDatabase[currentUserId];
+  if (user == null) {
+    request.response.statusCode = 404;
+    request.response.write(jsonEncode({'error': 'User not found'}));
+    request.response.close();
+    return;
+  }
+
+  request.response.statusCode = 200;
+  request.response.write(jsonEncode(user["favoritePlaces"]));
+  request.response.close();
+}
+
+void handleAddFavorite(HttpRequest request) {
+  if (currentUserId == null) {
+    request.response.statusCode = 401;
+    request.response.write(jsonEncode({'error': 'Not authenticated'}));
+    request.response.close();
+    return;
+  }
+
+  StringBuffer buffer = StringBuffer();
+  request.listen(
+    (List<int> chunk) => buffer.write(utf8.decode(chunk)),
+    onDone: () {
+      try {
+        final user = usersDatabase[currentUserId];
+        if (user == null) {
+          request.response.statusCode = 404;
+          request.response.write(jsonEncode({'error': 'User not found'}));
+          request.response.close();
+          return;
+        }
+
         final newFavorite = jsonDecode(buffer.toString());
-        final favorites = userData["user"]["favoritePlaces"] as List;
+        final favorites = user["favoritePlaces"] as List;
         favorites.add(newFavorite);
         request.response.statusCode = 201;
         request.response.write(jsonEncode(newFavorite));
@@ -231,6 +495,13 @@ void handleAddFavorite(HttpRequest request) {
 }
 
 void handleRemoveFavorite(HttpRequest request) {
+  if (currentUserId == null) {
+    request.response.statusCode = 401;
+    request.response.write(jsonEncode({'error': 'Not authenticated'}));
+    request.response.close();
+    return;
+  }
+
   final id = int.tryParse(request.uri.pathSegments.last);
   if (id == null) {
     request.response.statusCode = 400;
@@ -238,7 +509,16 @@ void handleRemoveFavorite(HttpRequest request) {
     request.response.close();
     return;
   }
-  final favorites = userData["user"]["favoritePlaces"] as List;
+
+  final user = usersDatabase[currentUserId];
+  if (user == null) {
+    request.response.statusCode = 404;
+    request.response.write(jsonEncode({'error': 'User not found'}));
+    request.response.close();
+    return;
+  }
+
+  final favorites = user["favoritePlaces"] as List;
   final index = favorites.indexWhere((f) => f["id"] == id);
   if (index == -1) {
     request.response.statusCode = 404;

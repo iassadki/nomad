@@ -1,15 +1,16 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'auth_service.dart';
 
 class NotesService {
-  static const String _notesPrefix = 'note_trip_';
-
   static Future<String> getNote(int tripId) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final noteKey = '$_notesPrefix$tripId';
-      final noteText = prefs.getString(noteKey) ?? '';
-      
-      print('DEBUG: Loaded local note for trip $tripId: "$noteText"');
+      final currentUser = AuthService.currentUser;
+      if (currentUser == null) {
+        print('Error: No user logged in');
+        return '';
+      }
+
+      final noteText = currentUser.notes[tripId] ?? '';
+      print('DEBUG: Loaded note for trip $tripId: "$noteText"');
       return noteText;
     } catch (e) {
       print('Error loading local note: $e');
@@ -19,11 +20,20 @@ class NotesService {
 
   static Future<void> saveNote(int tripId, String noteText) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final noteKey = '$_notesPrefix$tripId';
-      await prefs.setString(noteKey, noteText);
+      final currentUser = AuthService.currentUser;
+      if (currentUser == null) {
+        print('Error: No user logged in');
+        return;
+      }
+
+      // Mettre à jour la note du voyage
+      final updatedNotes = {...currentUser.notes, tripId: noteText};
+      final updatedUser = currentUser.copyWith(notes: updatedNotes);
       
-      print('DEBUG: Saved local note for trip $tripId: "$noteText"');
+      // Mettre à jour le user
+      await AuthService.updateCurrentUser(updatedUser);
+      
+      print('DEBUG: Saved note for trip $tripId: "$noteText"');
     } catch (e) {
       print('Error saving local note: $e');
     }
@@ -31,11 +41,21 @@ class NotesService {
 
   static Future<void> deleteNote(int tripId) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final noteKey = '$_notesPrefix$tripId';
-      await prefs.remove(noteKey);
+      final currentUser = AuthService.currentUser;
+      if (currentUser == null) {
+        print('Error: No user logged in');
+        return;
+      }
+
+      // Supprimer la note du voyage
+      final updatedNotes = {...currentUser.notes};
+      updatedNotes.remove(tripId);
+      final updatedUser = currentUser.copyWith(notes: updatedNotes);
       
-      print('DEBUG: Deleted local note for trip $tripId');
+      // Mettre à jour le user
+      await AuthService.updateCurrentUser(updatedUser);
+      
+      print('DEBUG: Deleted note for trip $tripId');
     } catch (e) {
       print('Error deleting local note: $e');
     }

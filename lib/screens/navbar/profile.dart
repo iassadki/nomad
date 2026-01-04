@@ -3,8 +3,8 @@ import '../../components/bottom_nav_bar.dart';
 import '../../constants/text_styles.dart';
 import '../../components/trip_card.dart';
 import '../../components/button_primary.dart';
-// import '../../components/floating_button.dart';
-import '../../services/user_service.dart';
+import '../../components/floating_button.dart';
+import '../../services/auth_service.dart';
 import '../../services/trips_state.dart';
 import '../trip_related/my_trip.dart';
 
@@ -46,13 +46,13 @@ class _ProfileState extends State<Profile> with WidgetsBindingObserver {
 
   Future<void> _loadUserData() async {
     try {
-      final user = await UserService.getUser();
+      final currentUser = AuthService.currentUser;
       
-      if (user != null) {
-        print('Username: ${user['username']}');
+      if (currentUser != null) {
+        print('Username: ${currentUser.username}');
         if (mounted) {
           setState(() {
-            _userName = user['username'] ?? 'Unknown';
+            _userName = currentUser.username;
           });
         }
       } else {

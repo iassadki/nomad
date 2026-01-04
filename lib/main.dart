@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
-import 'screens/account_and_login/login.dart';
-import 'screens/navbar/trips.dart';
-import 'screens/trip_related/my_trip.dart';
+import 'screens/login.dart';
+import 'screens/create_user.dart';
+import 'screens/navbar/profile.dart';
 import 'screens/navbar/search.dart';
 import 'screens/navbar/favorites.dart';
-import 'screens/navbar/profile.dart';
+import 'screens/navbar/trips.dart';
+import 'screens/trip_related/my_trip.dart';
 import 'screens/trip_related/create_trip.dart';
 import 'screens/trip_related/map.dart' as map_page;
+import 'services/auth_service.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AuthService.initialize();
+  runApp(const MyApp());
+}
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -22,34 +28,37 @@ class _MyAppState extends State<MyApp> {
     Widget page;
     switch (settings.name) {
       case '/':
-        page = const Login();
+        page = AuthService.isLoggedIn() ? Profile() : Login();
         break;
       case '/login':
-        page = const Login();
+        page = Login();
         break;
-      case '/trips':
-        page = const Trips();
-        break;
-      case '/search':
-        page = const Search();
-        break;
-      case '/favorites':
-        page = const Favorites();
+      case '/create_user':
+        page = CreateUser();
         break;
       case '/profile':
-        page = const Profile();
+        page = Profile();
+        break;
+      case '/search':
+        page = Search();
+        break;
+      case '/favorites':
+        page = Favorites();
         break;
       case '/my_trip':
-        page = const my_trip();
+        page = my_trip();
+        break;
+      case '/trips':
+        page = Trips();
         break;
       case '/create_trip':
-        page = const CreateTrip();
+        page = CreateTrip();
         break;
       case '/map':
-        page = const map_page.MapPage();
+        page = map_page.MapPage();
         break;
       default:
-        page = const Login();
+        page = Login();
     }
 
     return PageRouteBuilder(

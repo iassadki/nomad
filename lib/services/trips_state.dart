@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'auth_service.dart';
 
 class TripsState {
   static final TripsState _instance = TripsState._internal();
@@ -17,20 +18,15 @@ class TripsState {
 
   Future<void> loadTrips() async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/trips'));
-      
-      if (response.statusCode == 200) {
-        final tripsData = jsonDecode(response.body) as List;
-        
-        _trips = List<Map<String, dynamic>>.from(
-          tripsData.map((trip) => Map<String, dynamic>.from(trip as Map))
-        );
-        
-        print('Loaded ${_trips.length} trips from API');
-      } else {
-        print('Error loading trips: ${response.statusCode}');
-        _trips = [];
+      final currentUser = AuthService.currentUser;
+      if (currentUser == null) {
+        print('Error: No user logged in');
+        return;
       }
+
+      // Charger les trips du user courant
+      _trips = currentUser.trips;
+      print('Loaded ${_trips.length} trips from current user');
     } catch (e) {
       print('Error loading trips: $e');
       _trips = [];
@@ -39,20 +35,29 @@ class TripsState {
 
   Future<void> addTrip(Map<String, dynamic> newTrip) async {
     try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/trips'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(newTrip),
-      );
-
-      if (response.statusCode == 201) {
-        final createdTrip = jsonDecode(response.body) as Map<String, dynamic>;
-        _trips.add(createdTrip);
-        print('Trip added via API: ${newTrip['destination']}');
-        print('Total trips: ${_trips.length}');
-      } else {
-        print('Error adding trip: ${response.statusCode}');
+      final currentUser = AuthService.currentUser;
+      if (currentUser == null) {
+        print('Error: No user logged in');
+        return;
       }
+
+      // Générer un ID pour le voyage
+      final tripId = currentUser.trips.isEmpty ? 1 : (currentUser.trips.map((t) => t['tripId'] as int? ?? 0).reduce((a, b) => a > b ? a : b) + 1);
+      
+      final tripWithId = {...newTrip, 'tripId': tripId};
+      
+      // Ajouter au voyage à la liste du user
+      final updatedTrips = [...currentUser.trips, tripWithId];
+      final updatedUser = currentUser.copyWith(trips: updatedTrips);
+      
+      // Mettre à jour le user
+      await AuthService.updateCurrentUser(updatedUser);
+      
+      // Mettre à jour l'état local
+      _trips = updatedTrips;
+      
+      print('Trip added: ${newTrip['destination']}');
+      print('Total trips: ${_trips.length}');
     } catch (e) {
       print('Error adding trip: $e');
     }
@@ -60,17 +65,24 @@ class TripsState {
 
   Future<void> deleteTrip(int tripId) async {
     try {
-      final response = await http.delete(
-        Uri.parse('$baseUrl/trips/$tripId'),
-      );
-
-      if (response.statusCode == 200) {
-        _trips.removeWhere((trip) => trip['tripId'] == tripId);
-        print('Trip deleted via API with ID: $tripId');
-        print('Total trips: ${_trips.length}');
-      } else {
-        print('Error deleting trip: ${response.statusCode}');
+      final currentUser = AuthService.currentUser;
+      if (currentUser == null) {
+        print('Error: No user logged in');
+        return;
       }
+
+      // Supprimer le voyage de la liste du user
+      final updatedTrips = currentUser.trips.where((trip) => trip['tripId'] != tripId).toList();
+      final updatedUser = currentUser.copyWith(trips: updatedTrips);
+      
+      // Mettre à jour le user
+      await AuthService.updateCurrentUser(updatedUser);
+      
+      // Mettre à jour l'état local
+      _trips = updatedTrips;
+      
+      print('Trip deleted with ID: $tripId');
+      print('Total trips: ${_trips.length}');
     } catch (e) {
       print('Error deleting trip: $e');
     }
